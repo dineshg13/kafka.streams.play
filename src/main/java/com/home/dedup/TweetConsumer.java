@@ -29,15 +29,16 @@ public class TweetConsumer {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, IKafkaConstants.OFFSET_RESET_EARLIER);
 
         Consumer<Long, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList(IKafkaConstants.OUT_TOPIC_NAME));
+        consumer.subscribe(Collections.singletonList(IKafkaConstants.IN_TOPIC_NAME));
         return consumer;
     }
 
     public void runConsumer() {
 
-        int noMessageFound = 0;
+        int cnt = 0;
 
         while (true) {
+            logger.info("polling" + kafkaConsumer.assignment());
             ConsumerRecords<Long, String> consumerRecords = kafkaConsumer.poll(Duration.of(1, ChronoUnit.SECONDS));
             // 1000 is the time in milliseconds consumer will wait if no record is found at broker.
 
@@ -50,6 +51,10 @@ public class TweetConsumer {
                                 ", Record offset " + record.offset());
             });
 
+//            cnt++;
+//            if (cnt == 10) {
+//                kafkaConsumer.close();
+//            }
             // commits the offset of record to broker.
             kafkaConsumer.commitAsync();
         }

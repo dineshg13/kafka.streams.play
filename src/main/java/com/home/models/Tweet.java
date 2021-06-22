@@ -66,7 +66,7 @@ public class Tweet {
         this.time = time;
     }
 
-    public String Serialize() {
+    public String serialize() {
         ObjectMapper objectMapper = new ObjectMapper();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 

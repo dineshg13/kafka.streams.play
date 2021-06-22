@@ -3,9 +3,7 @@ package com.home.dedup;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KeyValueMapper;
 import org.apache.kafka.streams.kstream.Transformer;
-import org.apache.kafka.streams.kstream.Windowed;
 import org.apache.kafka.streams.processor.ProcessorContext;
-import org.apache.kafka.streams.state.KeyValueIterator;
 import org.apache.kafka.streams.state.WindowStore;
 import org.apache.kafka.streams.state.WindowStoreIterator;
 import org.slf4j.Logger;
@@ -77,11 +75,6 @@ public class DeduplicationTransformer<K, V, E> implements Transformer<K, V, KeyV
     private boolean isDuplicate(final E eventId) {
         final long eventTime = context.timestamp();
 
-        final KeyValueIterator<Windowed<E>, Long> all = eventIdStore.fetchAll(0, eventTime + rightDurationMs);
-        while (all.hasNext()) {
-            KeyValue<Windowed<E>, Long> w = all.next();
-            logger.info("element : " + w.key.key() + ", time:" + w.value);
-        }
         final WindowStoreIterator<Long> timeIterator = eventIdStore.fetch(
                 eventId,
                 eventTime - leftDurationMs,

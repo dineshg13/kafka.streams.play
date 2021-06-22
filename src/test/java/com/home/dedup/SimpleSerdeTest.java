@@ -11,7 +11,7 @@ public class SimpleSerdeTest {
     public void TestTweetSerde() {
 
         Tweet t = new Tweet(10L, "10", Instant.now());
-        String s = t.Serialize();
+        String s = t.serialize();
         System.out.println(s);
         Tweet n = Tweet.Deserialize(s);
         assert t.equals(n);

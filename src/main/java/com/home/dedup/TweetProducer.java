@@ -42,7 +42,7 @@ public class TweetProducer {
 
         for (int i = 0; i < n; i++) {
             Tweet t = new Tweet(Long.valueOf(i % 5), String.valueOf(i), Instant.now());
-            ProducerRecord<String, String> record = new ProducerRecord<>(topic, i % IKafkaConstants.NUM_OF_PARTITIONS, t.getId().toString(), t.Serialize());
+            ProducerRecord<String, String> record = new ProducerRecord<>(topic, i % IKafkaConstants.NUM_OF_PARTITIONS, t.getId().toString(), t.serialize());
             try {
                 RecordMetadata metadata = this.kafkaProducer.send(record).get();
                 logger.info("message No: " + i + ", topic:" + metadata.topic() + " partition:" + metadata.partition() + " ,offset:" + metadata.offset());
